@@ -57,6 +57,7 @@ function openDingTalk(){
 
 //单次执行全流程的方法,若执行成功会返回true
 function jobRun(delay){
+	console.log('等待毫秒数:'+parseInt(delay));
 	var result = false;
 	sleep(parseInt(delay));
 	//点亮屏幕
@@ -67,10 +68,11 @@ function jobRun(delay){
 
 //执行计划任务，主方法
 function jobSchedule(){
+	console.hide();
 	console.show();
 	//轮询
 	while(true){
-		console.log('开始轮询');
+		console.log('开始轮询,'+new Date());
 		var date = new Date();
 		//获取当前星期，0-周日，1~6-周一到周六
 		var dayOfWeek = date.getDay();
@@ -78,19 +80,20 @@ function jobSchedule(){
 		var hour = date.getHours();
 		var minute = date.getMinutes();
 		if(runFlag&&dayOfWeek>=1&&dayOfWeek<=5&&hour==initHour&&minute>=initMinute&&minute<=initMinute+2){
-			console.log('开始执行任务');
+			console.log('开始执行任务,'+new Date());
 			runFlag = false;
 			var initMinRandom = minute - initMinute + 1;
 			var r = random(initMinRandom,initMaxRandom);
+			console.log('随机范围:'+initMinRandom+','+initMaxRandom+',实际随机分钟数='+r);
 			var result = jobRun(1000*60*r);
 			if(result==false){
-				console.log('脚本执行失败');
+				console.log('脚本执行失败,'+new Date());
 			}else{
-				console.log('脚本执行成功');
+				console.log('脚本执行成功,'+new Date());
 				//一定间隔后可以再次执行任务
 				sleep(1000*60*30);
 				runFlag = true;
-				console.log('下次任务执行权限已开启');
+				console.log('下次任务执行权限已开启,'+new Date());
 			}
 		}else{
 			console.log('任务执行条件未满足');
